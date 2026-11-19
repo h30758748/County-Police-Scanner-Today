@@ -2,6 +2,11 @@ name: Create Static.app Site
 
 on:
   workflow_dispatch:
+    inputs:
+      domain:
+        description: "Static.app subdomain (lowercase a-z, at most one hyphen, no digits)"
+        required: true
+        default: "county-policescannertoday"
 
 jobs:
   create-site:
@@ -15,4 +20,4 @@ jobs:
           cd static-app
           zip -r ../site.zip .
           cd ..
-          curl -s -X POST "https://api.static.app/v1/sites/zip" -H "Authorization: Bearer $STATIC_APP_API_KEY" -F "archive=@site.zip" -F "domain=county-police-scanner-today"
+          curl -sS -f -X POST "https://api.static.app/v1/sites/zip" -H "Authorization: Bearer $STATIC_APP_API_KEY" -F "archive=@site.zip" -F "domain=${{ inputs.domain }}"
